@@ -28,7 +28,7 @@ Parámetros:
 	- tol (float): tolerancia de convergencia del método numérico.
 
 Regresa:
-	- Tnew (vector, float): perfil de temperatura en régimen estacionario, de tamaño nCells, en [K].
+	- Tnew (vector, float): perfil de temperatura en régimen transitorio, de tamaño nCells, en [K].
 	- error (vector, float): error de convergencia, de tamaño del número de pasos de tiempo.
 	- bilan (vector, float): balance de energía al lograr convergencia en cada paso de tiempo.
 

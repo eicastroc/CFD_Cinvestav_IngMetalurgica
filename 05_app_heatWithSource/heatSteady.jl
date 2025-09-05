@@ -127,6 +127,7 @@ function constructLHS_stat(X, nCells, Told, λ, htc)
 	aE = λ * A / Δx
 	aW= λ * A / Δx
 
+
 	# Resistencia a las fronteras por conveccion + difusion
 	Rth = (htc * (λ/(Δx/2))) / (htc + (λ/(Δx/2))) 
 
