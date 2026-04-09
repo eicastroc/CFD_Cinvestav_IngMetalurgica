@@ -1,0 +1,140 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2306                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     pimpleFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         180;
+
+deltaT          0.1;
+
+writeControl    adjustable;
+
+writeInterval   10;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           1.0;
+
+// ************************************************************************* //
+functions
+{
+    fieldAverage1
+    {
+        // Mandatory entries (unmodifiable)
+        type            fieldAverage;
+        libs            (fieldFunctionObjects);
+
+
+        // Mandatory entries (runtime modifiable)
+        fields
+        (
+            U
+            {
+                mean        yes;
+                prime2Mean  no;
+                base        time;
+            }
+        );
+    
+        // Optional entries (runtime modifiable)
+        restartOnRestart    false;
+        restartOnOutput     false;
+        periodicRestart     true;
+        restartPeriod       10;
+        
+        // Optional (inherited) entries
+        enabled         true;
+        writeControl    writeTime;
+    }
+
+    surfaceFieldValue1
+    {
+        // Mandatory entries (unmodifiable)
+        type            surfaceFieldValue;
+        libs            (fieldFunctionObjects);
+
+        // Mandatory entries (runtime modifiable)
+        fields          (U phi);
+        operation       areaAverage;
+        regionType      patch;
+        name            outlet;
+
+        // Optional entries (runtime modifiable)
+        postOperation   none;
+        weightField     phi;
+        scaleFactor     1.0;
+        writeArea       false;
+        surfaceFormat   none;
+
+        // Optional (inherited) entries
+        writeFields     false;
+        scalingFactor   1.0;
+        writePrecision  8;
+        writeToFile     true;
+        //writeControl    writeTime;
+        writeControl    timeStep;
+        writeInterval   10;
+    }
+
+    surfaceFieldValue2
+    {
+        // Mandatory entries (unmodifiable)
+        type            surfaceFieldValue;
+        libs            (fieldFunctionObjects);
+
+        // Mandatory entries (runtime modifiable)
+        fields          (U phi);
+        operation       areaAverage;
+        regionType      patch;
+        name            inlet;
+
+        // Optional entries (runtime modifiable)
+        postOperation   none;
+        weightField     phi;
+        scaleFactor     1.0;
+        writeArea       false;
+        surfaceFormat   none;
+
+        // Optional (inherited) entries
+        writeFields     false;
+        scalingFactor   1.0;
+        writePrecision  8;
+        writeToFile     true;
+        //writeControl    writeTime;
+        writeControl    timeStep;
+        writeInterval   10;
+    }
+}
