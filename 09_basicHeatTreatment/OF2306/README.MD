@@ -47,22 +47,22 @@ Este ejemplo agrupa en un solo lugar las dos maneras de efectuar el mallado de l
 
 - El mallado se puede efectuar mediante el encadenamiento de `blockMesh`, `surfaceFeatures`, y `snappyHexMesh`, si se tiene una geometría definida en formato `.stl`.
 
-Las geometrías, ya sea en archivo `.ans` o archivo `.stl` se encuentran dentro de la carpeta `constant/geometry`.
+Las geometrías, ya sea en archivo `.ans` o archivo `.stl` se encuentran dentro de la carpeta `constant/triSurface`.
 
 Para probar el uso de cualquiera de los métodos de mallado, basta con comentar/descomentar las líneas pertinentes en el archivo `Allrun` del caso de interés.
 
 Si se quiere utilizar la utileria `ansysToFoam`, se descomenta la línea:
 
 ```sh
-runAnsysToFoam constant/geometry/flange.ans 0.001
+runAnsysToFoam constant/triSurface/flange.ans 0.001
 ```
 
 Si se quiere utilizar `snappyHexMesh`, se descomentan las líneas:
 
 ```sh
 runApplication blockMesh
-runApplication surfaceFeatures
-runApplication snappyHexMesh
+runApplication surfaceFeatureExtract
+runApplication snappyHexMesh -overwrite
 ```
 
 ## Librería de materiales
@@ -76,9 +76,10 @@ Para asignar un material específico para una simulación, basta con referenciar
 ```c++
 FoamFile
 {
+    version     2.0;
     format      ascii;
     class       dictionary;
-    object      physicalProperties;
+    object      thermophysicalProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -89,37 +90,39 @@ FoamFile
 
 Los ejemplos de transferencia de calor conjugada `CHT` muestran generalmente casos en los que la conductividad térmica y la capacidad calorífica son constantes.
 
-- conductividad térmica: `transport       constIsoSolid;`
-- capacidad calorífica: `thermo          eConst;`
+- conductividad térmica: `transport       constIso;`
+- capacidad calorífica: `thermo          hConst;`
+- densidad: `equationOfState rhoConst;`
 
 ```c++
 thermoType
 {
     type            heSolidThermo;
     mixture         pureMixture;
-    transport       constIsoSolid;
-    thermo          eConst;
+    transport       constIso;
+    thermo          hConst;
     equationOfState rhoConst;
     specie          specie;
-    energy          sensibleInternalEnergy;
+    energy          sensibleEnthalpy;
 }
 ```
 
 En el archivo `constant/materials/steel4140` se muestra un ejemplo en el que la conductividad térmica y la capacidad calorífica no son constantes, y se especifican por medio de tablas.
 
-- conductividad térmica: `transport       tabulatedSolid;`
-- capacidad calorífica: `thermo          eIcoTabulated;`
+- conductividad térmica: `transport       tabulated;`
+- capacidad calorífica: `thermo          hTabulated;`
+- densidad: `equationOfState icoTabulated;`
 
 ```c++
 thermoType
 {
     type            heSolidThermo;
     mixture         pureMixture;
-    transport       tabulatedSolid;
-    thermo          eIcoTabulated;
-    equationOfState rhoConst;
+    transport       tabulated;
+    thermo          hTabulated;
+    equationOfState icoTabulated;
     specie          specie;
-    energy          sensibleInternalEnergy;
+    energy          sensibleEnthalpy;
 }
 ```
 
