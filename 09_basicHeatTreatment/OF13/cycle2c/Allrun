@@ -1,0 +1,37 @@
+#!/bin/sh
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runAnsysToFoam()
+{
+    if [ -f log.ansysToFoam ]
+    then
+        echo "ansysToFoam already run on $PWD: remove log file to re-run"
+    else
+        echo "Running ansysToFoam: converting mesh $1"
+        ansysToFoam $1 -scale $2 > log.ansysToFoam 2>&1
+    fi
+}
+
+
+######################## The block below is for meshing with ansysToFoam
+## comment or uncomment as required
+
+runAnsysToFoam constant/geometry/flange.ans 0.001
+
+
+###################### The block below is for meshing with snappyHexMesh
+## comment or uncomment as required
+
+#runApplication blockMesh
+#runApplication surfaceFeatures
+#runApplication snappyHexMesh
+
+
+###################### The block below runs the simulation
+
+runApplication  foamRun
+
+#------------------------------------------------------------------------------

@@ -1,0 +1,96 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    object      T;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 0 0 1 0 0 0];
+
+internalField   uniform 298;
+
+generalBC
+{
+        type            externalWallHeatFluxTemperature;
+        mode            coefficient;
+        h               table
+        // t[s]  h[W/(m2.K)]
+        (
+            // 
+            (0      100)
+            (360    100)
+            (361     10)
+            (389     10)
+            (390   1400)
+            (600   1400)
+        );
+        Ta              table
+        (
+            (0      1223)
+            (360    1223)
+            (361     298)
+            (389     298)
+            (390    298)
+            (600    298)
+        );
+        kappaMethod     solidThermo;
+        value           $internalField;    
+}
+
+
+boundaryField
+{
+
+    // These patches are used when meshing is done with ansysToFoam
+    patch1
+    {
+        $generalBC;
+    }
+
+    patch2
+    {
+        $generalBC;
+    }
+
+    patch3
+    {
+        $generalBC;
+    }
+
+    patch4
+    {
+        $generalBC;
+    }
+
+
+    // These  patches are used when meshing is done with snappyHexMesh
+    flange_patch1
+    {
+        $generalBC;
+    }
+
+    flange_patch2
+    {
+        $generalBC;
+    }
+
+    flange_patch3
+    {
+        $generalBC;
+    }
+
+    flange_patch4
+    {
+        $generalBC;
+    }
+}
+
+// ************************************************************************* //

@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  13
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      functions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+averageT
+{
+    // Mandatory entries
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    operation       average;
+    fields          (T);
+    writeFields     false;
+    cellZone        all;
+
+    // Optional entries
+    writeControl    timeStep;
+    writeInterval   2;
+    writeToFile     true;    
+}
+
+minT
+{
+    // Mandatory entries
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    operation       min;
+    fields          (T);
+    writeFields     false;
+    cellZone        all;
+
+    // Optional entries
+    writeControl    timeStep;
+    writeInterval   2;
+    writeToFile     true;  
+}
+
+maxT
+{
+    // Mandatory entries
+    type            volFieldValue;
+    libs            ("libfieldFunctionObjects.so");
+    operation       max;
+    fields          (T);
+    writeFields     false;
+    cellZone        all;
+
+    // Optional entries
+    writeControl    timeStep;
+    writeInterval   2;
+    writeToFile     true;  
+}
