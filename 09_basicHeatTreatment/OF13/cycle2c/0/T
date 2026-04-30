@@ -42,6 +42,7 @@ generalBC
             (600    298)
         );
         kappaMethod     solidThermo;
+        emissivity      0;  // | Surface emissivity for radiative flux to ambient | no | 0
         value           $internalField;    
 }
 
